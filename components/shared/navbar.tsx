@@ -30,7 +30,7 @@ export function Navbar() {
               Dashboard
             </Link>
             <Link href="/user">
-              <Button variant="default" className="animate-shimmer bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%]">
+              <Button variant="default" className="animate-shimmer bg-violet-400 ">
                 My Profile
               </Button>
             </Link>

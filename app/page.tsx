@@ -17,11 +17,11 @@ export default function Home() {
         <div className="absolute inset-0 w-full h-full">
           <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-primary/10 to-background"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_50%_200px,var(--primary-light,#6d109f),transparent)]"></div>
-          <div className="absolute inset-0">
+          {/* <div className="absolute inset-0">
             <div className="absolute top-0 -left-4 w-72 h-72 bg-primary/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
             <div className="absolute top-0 -right-4 w-72 h-72 bg-secondary/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
             <div className="absolute -bottom-8 left-20 w-72 h-72 bg-accent/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
-          </div>
+          </div> */}
         </div>
 
         <div className="relative max-w-5xl mx-auto text-center space-y-8 px-4">
@@ -29,12 +29,12 @@ export default function Home() {
             <div className="relative">
               <Navigation2 className="h-16 w-16 text-secondary animate-float" />
               <div className="absolute inset-0 animate-ping-slow opacity-50">
-                <Navigation2 className="h-16 w-16 text-secondary" />
+                {/* <Navigation2 className="h-16 w-16 text-secondary" /> */}
               </div>
             </div>
           </div>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r  animate-gradient bg-gradient-to-r from-purple-300 to-secondary">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r  animate-gradient  from-purple-300 to-secondary">
               AI-Powered Navigation
             </span>
             <span className="block mt-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-secondary">
@@ -69,8 +69,8 @@ export default function Home() {
       <section id="features" className="relative py-24 px-4">
         <div className="absolute inset-0 bg-gradient-to-b from-background via-secondary/5 to-background"></div>
         <div className="relative max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-16">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-primary/50">
+          <h2 className="text-4xl font-bold text-center mb-16">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-purple-200">
               Key Features
             </span>
           </h2>
@@ -104,7 +104,7 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode; titl
     <div className="group relative p-6 bg-card/50 backdrop-blur-sm rounded-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-border/50">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
       <div className="relative">
-        <div className="text-primary mb-4 transform transition-transform group-hover:scale-110">{icon}</div>
+        <div className="text-purple-300 mb-4 transform transition-transform group-hover:scale-110">{icon}</div>
         <h3 className="text-xl font-semibold mb-2">{title}</h3>
         <p className="text-muted-foreground">{description}</p>
       </div>

@@ -60,11 +60,11 @@ export function Navbar() {
             >
               Home
             </Link>
-            <Link
-              href="#features"
+           <Link
+              href="/shortcuts"
               className="block px-3 py-2 rounded-md text-base font-medium hover:bg-accent"
             >
-              Features
+              Shortcuts
             </Link>
             <Link
               href="/dashboard"
@@ -78,6 +78,7 @@ export function Navbar() {
             >
               My Profile
             </Link>
+            
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -11,22 +11,21 @@ import { Textarea } from "@/components/ui/textarea"
 import { Clock, Globe, Star, ArrowRight, History, User, Save, Edit ,Droplet,Phone,FileText} from "lucide-react"
 import { Navbar } from "@/components/shared/navbar"
 import { Footer } from "@/components/shared/footer"
-
+import { createClient } from "@supabase/supabase-js"
 export default function UserProfile() {
     const [bloodGroup, setBloodGroup] = useState("A+");
   const [emergencyContact, setEmergencyContact] = useState("+1 234-567-8900");
   // Static data for sites and pages
-  const recentSites = [
-    { name: "Example.com", url: "https://example.com", visits: 25, lastVisit: "2 hours ago" },
-    { name: "Test Site", url: "https://test.com", visits: 18, lastVisit: "5 hours ago" },
-    { name: "Demo App", url: "https://demo.app", visits: 12, lastVisit: "1 day ago" },
-  ]
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-  const frequentPages = [
-    { name: "Dashboard", url: "/dashboard", visits: 150 },
-    { name: "Settings", url: "/settings", visits: 89 },
-    { name: "Profile", url: "/profile", visits: 67 },
-  ]
+// Type definitions for metadata
+type MetadataItem = {
+  key: string;
+  value: string;
+}
+  
  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>, documentType: string) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -42,6 +41,60 @@ export default function UserProfile() {
     address: "123 Main Street, Anytown, USA 12345",
   })
 
+  const userDataToMetadata = (data: typeof userData): MetadataItem[] => {
+  return Object.entries(data).map(([key, value]) => ({
+    key,
+    value: String(value)
+  }));
+};
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    const metadata = userDataToMetadata(userData);
+
+    // Use upsert to insert or update the user metadata
+    const { error } = await supabase
+      .from('users')
+      .upsert({
+      id: "d0e93cf3-42fd-4c78-b18c-2b9bc503a434", // Using the provided user ID
+      user_name: userData.name, // Keep the user_name for consistency with your fetch query
+      metadata: metadata
+      });
+
+    if (error) throw error;
+    
+    setIsEditing(false);
+    console.log('User metadata saved successfully');
+  } catch (error) {
+    console.error('Error saving user metadata:', error);
+  }
+};
+
+useEffect(() => {
+  const loadUserMetadata = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('metadata')
+        .eq('id ,' , 'd0e93cf3-42fd-4c78-b18c-2b9bc503a434') // Using the provided user ID
+        .single();
+
+      if (error) throw error;
+      
+      if (data?.metadata) {
+        const metadataObject = data.metadata.reduce((acc: any, item: MetadataItem) => {
+          acc[item.key] = item.value;
+          return acc;
+        }, {});
+        setUserData(metadataObject);
+      }
+    } catch (error) {
+      console.error('Error loading user metadata:', error);
+    }
+  };
+
+  loadUserMetadata();
+}, []);
   // State to track if form is in edit mode
   const [isEditing, setIsEditing] = useState(false)
 
@@ -55,11 +108,11 @@ export default function UserProfile() {
   }
 
   // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Here you would typically save the data to a backend
-    setIsEditing(false)
-  }
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   // Here you would typically save the data to a backend
+  //   setIsEditing(false)
+  // }
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -161,7 +214,7 @@ export default function UserProfile() {
                 <Button type="button" variant="outline" onClick={() => setIsEditing(false)} className="mr-2">
                   Cancel
                 </Button>
-                <Button type="submit">Save Changes</Button>
+                <Button type="submit" onClick={handleSubmit}>Save Changes</Button>
               </div>
             )}
           </form>
@@ -248,102 +301,10 @@ export default function UserProfile() {
         </Card>
 
         {/* User Stats */}
-        <div className="grid gap-4 md:grid-cols-3">
-          <Card className="p-6 hover:shadow-lg transition-shadow">
-            <div className="flex items-center gap-3">
-              <Globe className="h-8 w-8 text-primary" />
-              <div>
-                <h3 className="font-semibold">Total Sites</h3>
-                <p className="text-2xl font-bold">42</p>
-              </div>
-            </div>
-          </Card>
-          <Card className="p-6 hover:shadow-lg transition-shadow">
-            <div className="flex items-center gap-3">
-              <History className="h-8 w-8 text-primary" />
-              <div>
-                <h3 className="font-semibold">Navigation Sessions</h3>
-                <p className="text-2xl font-bold">156</p>
-              </div>
-            </div>
-          </Card>
-          <Card className="p-6 hover:shadow-lg transition-shadow">
-            <div className="flex items-center gap-3">
-              <Clock className="h-8 w-8 text-primary" />
-              <div>
-                <h3 className="font-semibold">Time Saved</h3>
-                <p className="text-2xl font-bold">3.5h</p>
-              </div>
-            </div>
-          </Card>
-        </div>
+        
 
         {/* Recently Visited Sites */}
-        <Card className="mt-8 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold flex items-center gap-2">
-              <History className="h-5 w-5 text-primary" />
-              Recently Visited Sites
-            </h2>
-            <Button variant="outline" size="sm" className="group">
-              View All
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </div>
-          <div className="space-y-4">
-            {recentSites.map((site, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-4 bg-muted rounded-lg hover:bg-accent/50 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <Globe className="h-5 w-5 text-primary" />
-                  <div>
-                    <h3 className="font-medium">{site.name}</h3>
-                    <p className="text-sm text-muted-foreground">{site.url}</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="font-medium">{site.visits} visits</p>
-                  <p className="text-sm text-muted-foreground">{site.lastVisit}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
-
-        {/* Frequently Visited Pages */}
-        <Card className="mt-8 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold flex items-center gap-2">
-              <Star className="h-5 w-5 text-primary" />
-              Frequently Visited Pages
-            </h2>
-            <Button variant="outline" size="sm" className="group">
-              View All
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </div>
-          <div className="space-y-4">
-            {frequentPages.map((page, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-4 bg-muted rounded-lg hover:bg-accent/50 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <Star className="h-5 w-5 text-primary" />
-                  <div>
-                    <h3 className="font-medium">{page.name}</h3>
-                    <p className="text-sm text-muted-foreground">{page.url}</p>
-                  </div>
-                </div>
-                <div>
-                  <p className="font-medium">{page.visits} visits</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
+  
       </main>
 
       <Footer />

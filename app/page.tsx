@@ -66,6 +66,28 @@ export default function Home() {
       </header>
 
       {/* Features Section */}
+
+
+      {/* Video Section */}
+      <section className="py-24 px-4 bg-background relative">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-8">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-purple-200">
+              See It In Action
+            </span>
+          </h2>
+          <div className="relative aspect-video rounded-lg overflow-hidden shadow-2xl">
+            <iframe 
+              className="absolute inset-0 w-full h-full"
+              src="https://www.youtube.com/embed/qAjkCsmiHnA"
+              title="AI Navigation Demo"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </div>
+      </section>
       <section id="features" className="relative py-24 px-4">
         <div className="absolute inset-0 bg-gradient-to-b from-background via-secondary/5 to-background"></div>
         <div className="relative max-w-6xl mx-auto">

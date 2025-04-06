@@ -56,7 +56,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     const { error } = await supabase
       .from('users')
       .upsert({
-      id: "d0e93cf3-42fd-4c78-b18c-2b9bc503a434", // Using the provided user ID
+      id: "8bf45060-87a9-4b26-ab23-00e404b1a4a5",
       user_name: userData.name, // Keep the user_name for consistency with your fetch query
       metadata: metadata
       });
@@ -76,7 +76,7 @@ useEffect(() => {
       const { data, error } = await supabase
         .from('users')
         .select('metadata')
-        .eq('id ,' , 'd0e93cf3-42fd-4c78-b18c-2b9bc503a434') // Using the provided user ID
+        .eq('id ,' , '8bf45060-87a9-4b26-ab23-00e404b1a4a5')
         .single();
 
       if (error) throw error;

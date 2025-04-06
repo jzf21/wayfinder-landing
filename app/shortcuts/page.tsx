@@ -295,7 +295,7 @@ export default function ShortcutsPage() {
               </div>
             ) : (
               <p className="text-center text-muted-foreground py-8">
-                You haven't added any favorites yet. Click the star icon on any shortcut to add it here.
+                You haven added any favorites yet. Click the star icon on any shortcut to add it here.
               </p>
             )}
           </div>
